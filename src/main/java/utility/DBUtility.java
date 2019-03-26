@@ -8,7 +8,7 @@ import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 
 public class DBUtility {
 	
-	static String url, username, password;
+	public static String url, username, password;
 	static BasicDataSource connectionPool = new BasicDataSource();
 
 	static {
