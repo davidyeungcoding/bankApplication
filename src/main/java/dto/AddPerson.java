@@ -24,7 +24,6 @@ public class AddPerson {
 		
 		System.out.println("Please enter a unique username.");
 		username = scanner.nextLine();
-		// check for unique username
 		connection = DBUtility.getInstance();
 		statement = connection.createStatement();
 		try {
@@ -52,29 +51,17 @@ public class AddPerson {
 		System.out.println("Please provide an address else hit 'enter' or 'return' to skip ahead.");
 		address = scanner.nextLine();
 		
-		System.out.println(username + " || " + password + " || " + firstName + " || " + lastName + " || "
-				+ phoneNo + " || " + address);
-		
 		try {
-			System.out.println("inside try");
-			System.out.println(username + " || " + password + " || " + firstName + " || " + lastName + " || "
-					+ phoneNo + " || " + address);
-			String sql = "INSET INTO person VALUES ( ?, ?, ?, ?, ?, ?)";
-			PreparedStatement ps = connection.prepareStatement(sql);
-			System.out.println("after prepared statement");
-			System.out.println(username + " || " + password + " || " + firstName + " || " + lastName + " || "
-					+ phoneNo + " || " + address);
+//			String insertSQL = "INSET INTO person VALUES ( '"+username+"','"+password+"','"+firstName+"','"+lastName+"','"+phoneNo+"','"+address+"')";
+			String insertSQL = "INSERT INTO person VALUES ( ?, ?, ?, ?, ?, ?)";
+			PreparedStatement ps = connection.prepareStatement(insertSQL);
 			ps.setString(1, username);
 			ps.setString(2, password);
 			ps.setString(3, firstName);
 			ps.setString(4, lastName);
 			ps.setString(5, phoneNo);
 			ps.setString(6, address);
-
-			System.out.println("after set string");
-			System.out.println(username + " || " + password + " || " + firstName + " || " + lastName + " || "
-					+ phoneNo + " || " + address);
-			System.out.println(sql);
+			System.out.println(insertSQL);
 			ps.executeUpdate();
 			connection.commit();
 		} catch (SQLException e) {
