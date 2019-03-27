@@ -17,7 +17,6 @@ public class DBUtility {
 		try {
 			Properties properties = new Properties();
 			properties.load(new FileReader("C:\\Users\\David\\eclipse-workspace\\bank_application\\src\\main\\resources\\database.properties"));
-//			connectionPool.setDriver(properties.getProperty("driver"));
 			connectionPool.setUrl(properties.getProperty("url"));
 			connectionPool.setUsername(properties.getProperty("username"));
 			connectionPool.setPassword(properties.getProperty("password"));
