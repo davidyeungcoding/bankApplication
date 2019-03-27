@@ -12,6 +12,7 @@ import dto.UserScreen;
 import dto.EmployeeScreen;
 import dto.EmployeeScreen.*;
 import utility.DBUtility;
+import dto.AddPerson;
 
 
 public class ClientSide {
@@ -22,8 +23,10 @@ public class ClientSide {
 	static Connection connection;
 	static Statement statement;
 	
-	public static void main(String[] args) {
-		welcomeMessage();
+	public static void main(String[] args) throws SQLException {
+//		welcomeMessage();
+		
+		AddPerson.newPerson();
 //		EmployeeScreen.workerScreen();
 //		UserScreen.customerScreen();
 //		logger.info("Info log test.");
