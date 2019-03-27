@@ -13,6 +13,7 @@ import dto.EmployeeScreen;
 import dto.EmployeeScreen.*;
 import utility.DBUtility;
 import dto.AddPerson;
+import dto.LoginScreen;
 
 
 public class ClientSide {
@@ -24,21 +25,19 @@ public class ClientSide {
 	static Statement statement;
 	
 	public static void main(String[] args) throws SQLException {
-//		welcomeMessage();
-		
-		AddPerson.newPerson();
+		welcomeMessage();
 //		EmployeeScreen.workerScreen();
 //		UserScreen.customerScreen();
 //		logger.info("Info log test.");
 		
 	}
 
-	private static void welcomeMessage() {
+	private static void welcomeMessage() throws SQLException {
 		System.out.println("Thank you for choosing us for your banking needs. \nHow can we help?");
 		mainMenu();
 	}
 	
-	private static void mainMenu() {
+	private static void mainMenu() throws SQLException {
 		System.out.println("1) Create a New Account");
 		System.out.println("2) Login");
 		
@@ -57,10 +56,10 @@ public class ClientSide {
 		
 		switch(inputMain) {
 		case 1: 
-			createNewAcc();
+			AddPerson.newPerson();
 			break;
 		case 2:
-			login();
+			LoginScreen.login();
 			break;
 		default:
 			System.out.println("Please enter a valid response: 1 / 2");
@@ -68,51 +67,20 @@ public class ClientSide {
 		}
 	}
 
-	private static void createNewAcc() {
-		String username;
-		String password;
-		String userCheckSQL;
-		String testSQL;
-		
-		System.out.println("Please enter a unique username:");
-		username = scanner.nextLine();
-		try {
-			connection = DBUtility.getInstance();
-			statement = connection.createStatement();
-			userCheckSQL = "SELECT username FROM customer WHERE username = '" + username + "'";
-			ResultSet rs = statement.executeQuery(userCheckSQL);
-			boolean unique = rs.next();
-			
-			testSQL = "select username from customer";
-			String rsUsername = rs.getString("username");
-			System.out.println(rsUsername);
-//			if(unique = false) {
-//				password = createPass();
-//				System.out.println(username);
-//				System.out.println(password);
-//			} else {
-//				createNewAcc();
-//			}
-		} catch(SQLException e) {
-			System.out.println(e);
-			System.out.println("Username already in use, please use a different one.");
-			createNewAcc();
-		}
-		
-		currentUser = username;
-		// Go to account screen.
-	}
+//	private static void createNewAcc() throws SQLException {
+//		AddPerson.newPerson();
+//	}
 
-	private static String createPass() {
-		System.out.println("Please enter a password.");
-		String tempPass = scanner.nextLine();
-		System.out.println("Confirm your password.");
-		String newPass = scanner.nextLine();
-		if(tempPass != newPass) {
-			createPass();
-		}
-		return newPass;
-	}
+//	private static String createPass() {
+//		System.out.println("Please enter a password.");
+//		String tempPass = scanner.nextLine();
+//		System.out.println("Confirm your password.");
+//		String newPass = scanner.nextLine();
+//		if(tempPass != newPass) {
+//			createPass();
+//		}
+//		return newPass;
+//	}
 
 	private static void login() {	
 		System.out.println("Pleaes enter your username.");
@@ -122,14 +90,18 @@ public class ClientSide {
 		checkCredentials(username, password);
 		// Send user to customer screen if approved else display message 
 		// for pending approval
+
+		currentUser = username;
+		// Go to account screen.
 	}
 
 	private static void checkCredentials(String username, String password) {
 		// TODO Auto-generated method stub
 		
+		
 	}
 	
-	public static void logout() {
+	public static void logout() throws SQLException {
 		currentUser = "";
 		System.out.println();
 		System.out.println("Thank you for your business!");

@@ -1,5 +1,6 @@
 package dto;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import bank_application.frontend.*;
@@ -8,7 +9,7 @@ import dto.AccountWithdraw.*;
 public class UserScreen {
 	static Scanner scanner = new Scanner(System.in);
 	
-	public static void customerScreen() {
+	public static void customerScreen() throws SQLException {
 		System.out.println("What would you like to do?");
 		System.out.println("1) Make a Withdraw");
 		System.out.println("2) Make a Deposit");

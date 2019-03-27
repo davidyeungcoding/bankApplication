@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
+import bank_application.frontend.ClientSide;
 import utility.DBUtility;
 
 public class AddPerson {
@@ -22,7 +23,7 @@ public class AddPerson {
 		String phoneNo;
 		String address;
 		
-		System.out.println("Please enter a unique username.");
+		System.out.println("\nPlease enter a unique username.");
 		username = scanner.nextLine();
 		connection = DBUtility.getInstance();
 		statement = connection.createStatement();
@@ -30,13 +31,12 @@ public class AddPerson {
 			String checkUserSQL = "SELECT username FROM person WHERE username = '" + username + "'";
 			ResultSet rs = statement.executeQuery(checkUserSQL);
 			while(rs.next()) {
-				System.out.println("Username from DB: " + rs.getString("username"));
-				System.out.println(username + "is already in use. Please choose a different username.");
+				System.out.println("\n" + username + " is already in use. Please choose a different username.");
 				newPerson();
 			}
-		} catch (Exception e1) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		System.out.println("Please enter a password.");
 		password = scanner.nextLine();
@@ -47,12 +47,11 @@ public class AddPerson {
 		System.out.println("Please provide a phone number in the following format: ##########\n"
 				+ "If you do not have one just hit 'enter' or 'return' to move forward.");
 		phoneNo = scanner.nextLine();
-		// Integer.parseInt(phoneNo)
+		// Convert to int || Integer.parseInt(phoneNo)
 		System.out.println("Please provide an address else hit 'enter' or 'return' to skip ahead.");
 		address = scanner.nextLine();
 		
 		try {
-//			String insertSQL = "INSET INTO person VALUES ( '"+username+"','"+password+"','"+firstName+"','"+lastName+"','"+phoneNo+"','"+address+"')";
 			String insertSQL = "INSERT INTO person VALUES ( ?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = connection.prepareStatement(insertSQL);
 			ps.setString(1, username);
@@ -61,16 +60,17 @@ public class AddPerson {
 			ps.setString(4, lastName);
 			ps.setString(5, phoneNo);
 			ps.setString(6, address);
-			System.out.println(insertSQL);
 			ps.executeUpdate();
 			connection.commit();
+			System.out.println("\nNew account created successfully.\n\nReturning to main menu.\n");
 		} catch (SQLException e) {
-			System.out.println(e);
 			System.out.println("Something went wrong, please try entering your information again.");
 			connection.rollback();
+			newPerson();
+		} finally {
 			statement.close();
 			connection.close();
-			newPerson();
+			ClientSide.logout();
 		}
 	}
 }
