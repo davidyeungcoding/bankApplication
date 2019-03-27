@@ -71,6 +71,7 @@ public class LoginScreen {
 		} finally {
 			statement.close();
 			connection.close();
+			scanner.close();
 			ClientSide.logout();
 		}
 	}
