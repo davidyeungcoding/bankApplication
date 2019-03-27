@@ -1,11 +1,17 @@
 package bank_application.frontend;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 import dto.UserScreen;
 import dto.EmployeeScreen;
 import dto.EmployeeScreen.*;
+import utility.DBUtility;
 
 
 public class ClientSide {
@@ -13,11 +19,13 @@ public class ClientSide {
 //	static Logger logger = Logger.getLogger(ClientSide.class);
 	static Scanner scanner = new Scanner(System.in);
 	static public String currentUser = "";
+	static Connection connection;
+	static Statement statement;
 	
 	public static void main(String[] args) {
-//		welcomeMessage();
+		welcomeMessage();
 //		EmployeeScreen.workerScreen();
-		UserScreen.customerScreen();
+//		UserScreen.customerScreen();
 //		logger.info("Info log test.");
 		
 	}
@@ -60,29 +68,47 @@ public class ClientSide {
 	private static void createNewAcc() {
 		String username;
 		String password;
+		String userCheckSQL;
+		String testSQL;
 		
-		do {
-			System.out.println("Please enter a unique username:");
-			username = scanner.nextLine();
-		} while(checkUniqueUser() == false);
+		System.out.println("Please enter a unique username:");
+		username = scanner.nextLine();
+		try {
+			connection = DBUtility.getInstance();
+			statement = connection.createStatement();
+			userCheckSQL = "SELECT username FROM customer WHERE username = '" + username + "'";
+			ResultSet rs = statement.executeQuery(userCheckSQL);
+			boolean unique = rs.next();
+			
+			testSQL = "select username from customer";
+			String rsUsername = rs.getString("username");
+			System.out.println(rsUsername);
+//			if(unique = false) {
+//				password = createPass();
+//				System.out.println(username);
+//				System.out.println(password);
+//			} else {
+//				createNewAcc();
+//			}
+		} catch(SQLException e) {
+			System.out.println(e);
+			System.out.println("Username already in use, please use a different one.");
+			createNewAcc();
+		}
 		
-		System.out.println("Please enter a password:");
-		password = scanner.nextLine();
-		// Add additional check to confirm password
 		currentUser = username;
 		// Go to account screen.
-		System.out.println("User created username: " + username);
-		System.out.println("User created password: " + password);
-		System.out.println("Exiting Program");
-		System.exit(0);
-		// TODO Auto-generated method stub
-		
 	}
 
-	private static boolean checkUniqueUser() {
-		return false;
-		// TODO Auto-generated method stub
-		
+	private static String createPass() {
+		System.out.println("Please enter a password.");
+		String tempPass = scanner.nextLine();
+		System.out.println("Confirm your password.");
+		String newPass = scanner.nextLine();
+		if(tempPass != newPass) {
+			createPass();
+		}
+		return newPass;
 	}
 
 	private static void login() {	
